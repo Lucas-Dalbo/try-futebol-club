@@ -9,7 +9,7 @@ class UserRoute {
     this.route = express.Router();
     this._controller = controller;
 
-    this.route.get('/', this._controller.login);
+    this.route.get('/', (req, res, next) => this._controller.login(req, res, next));
   }
 }
 

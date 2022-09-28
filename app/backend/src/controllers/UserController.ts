@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import UserService from '../services/UserService';
 
 class UserController {
@@ -8,10 +8,14 @@ class UserController {
     this._service = service;
   }
 
-  public async login(req: Request, res: Response) :Promise<void> {
-    const { email, password } = req.body;
-    const user = await this._service.login(email, password);
-    res.status(200).json(user);
+  public async login(req: Request, res: Response, next: NextFunction) :Promise<void> {
+    try {
+      const { email, password } = req.body;
+      const user = await this._service.login(email, password);
+      res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
   }
 }
 
