@@ -2,7 +2,10 @@ import { Request, Response } from 'express';
 import UserService from '../services/UserService';
 
 class UserController {
-  constructor(private _service = new UserService()) {
+  private _service: UserService;
+
+  constructor(service = new UserService()) {
+    this._service = service;
   }
 
   public async login(req: Request, res: Response) :Promise<void> {
