@@ -5,7 +5,7 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import User from '../database/models/UserModel';
-import { mockInvalidUser, mockValidUser, sendValidUser } from './mocks';
+import { mockInvalidUser, mockValidUser, noEmailUser, noPasswordUser, sendValidUser } from './mocks';
 
 chai.use(chaiHttp);
 
@@ -69,6 +69,28 @@ describe('A rota POST /login', () => {
   
       expect(response.body).to.be.deep.equal({ message: 'Incorrect email or password' });
       expect(response.status).to.be.equal(401);
+    });
+  });
+
+  describe('Quando o email não é informado', () => {    
+    it('Retorna uma mensagem de erro com status 400', async () => {
+      const response = await chai.request(app)
+        .post('/login')
+        .send(noEmailUser);
+  
+      expect(response.body).to.be.deep.equal({ message: 'All fields must be filled' });
+      expect(response.status).to.be.equal(400);
+    });
+  });
+
+  describe('Quando o password não é informado', () => {    
+    it('Retorna uma mensagem de erro com status 400', async () => {
+      const response = await chai.request(app)
+        .post('/login')
+        .send(noPasswordUser);
+  
+      expect(response.body).to.be.deep.equal({ message: 'All fields must be filled' });
+      expect(response.status).to.be.equal(400);
     });
   });
 });

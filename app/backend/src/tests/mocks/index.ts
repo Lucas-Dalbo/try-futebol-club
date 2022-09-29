@@ -14,3 +14,11 @@ export const mockInvalidUser = {
   email: "messi@messi.com",
   password: "messiOficial"
 }
+
+export const noEmailUser = {
+  password: '987654'
+}
+
+export const noPasswordUser = {
+  email: 'seguranca@zero.com'
+}
