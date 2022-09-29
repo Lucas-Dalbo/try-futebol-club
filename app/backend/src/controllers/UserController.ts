@@ -16,7 +16,7 @@ class UserController {
   public async login(req: Request, res: Response, next: NextFunction) :Promise<void> {
     try {
       const { email, password } = req.body;
-      await this._service.login(email, password);
+      await this._service.login({ email, password });
 
       const token = UserController.createToken({ email, password });
 
