@@ -1,8 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 import { createJWT } from '../../auth'
 
-
-
 export const mockValidUser = {
   email: "ronaldo@fenomeno.com",
   password: bcrypt.hashSync("EuSouRonaldo09"),
@@ -33,3 +31,18 @@ export const roleUser = {
   password: "EuSouRonaldo09",
   role: "boleiro"
 }
+
+export const mockTeams = [
+  {
+    id: 1,
+    teamName: "Avaí/Kindermann"
+  },
+  {
+    id: 2,
+    teamName: "Bahia"
+  },
+  {
+    id: 3,
+    teamName: "Botafogo"
+  },
+]
