@@ -9,4 +9,9 @@ interface IUser extends LoginUser {
   role: string;
 }
 
-export { IUser, LoginUser };
+interface ITeam {
+  id: number,
+  teamName: string;
+}
+
+export { IUser, LoginUser, ITeam };
