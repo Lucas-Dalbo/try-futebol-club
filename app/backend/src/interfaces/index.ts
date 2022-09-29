@@ -24,8 +24,8 @@ interface IMatch {
 }
 
 interface IMatchTeams extends IMatch {
-  teamHome: { teamName: string },
-  teamAway: { teamName: string },
+  teamHome?: { teamName: string } | [{ teamName: string }],
+  teamAway?: { teamName: string } | [{ teamName: string }],
 }
 
 export { IUser, LoginUser, ITeam, IMatch, IMatchTeams };
