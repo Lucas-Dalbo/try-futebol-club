@@ -5,7 +5,7 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import Team from '../database/models/TeamModel';
-import { mockTeams } from './mocks';
+import { mockOneTeam, mockTeams } from './mocks';
 
 chai.use(chaiHttp);
 
@@ -26,6 +26,41 @@ describe('A rota GET /teams', () => {
 
       expect(response.body).to.be.an('array');
       expect(response.status).to.be.equal(200);
+    });
+  });
+
+  describe('Quando chamada com :id conhecido', () => {
+    before(() => {
+      sinon.stub(Team, 'findByPk').resolves(mockOneTeam as Team);
+    })
+
+    after(() => {
+      (Team.findByPk as sinon.SinonStub).restore();
+    })
+
+    it('Retorna o time com status 200', async () => {
+      const teamId = 3;
+      const response = await chai.request(app).get(`/teams/${teamId}`);
+
+      expect(response.body).to.be.deep.equal({ id: teamId, teamName: "Botafogo" });
+      expect(response.status).to.be.equal(200);
+    });
+  });
+
+  describe('Quando chamada com :id desconhecido', () => {
+    before(() => {
+      sinon.stub(Team, 'findByPk').resolves(null as unknown as Team);
+    })
+
+    after(() => {
+      (Team.findByPk as sinon.SinonStub).restore();
+    })
+
+    it('Retorna "Team not found" com status 404', async () => {
+      const response = await chai.request(app).get(`/teams/999`);
+
+      expect(response.body).to.be.deep.equal({ message: 'Team not found' });
+      expect(response.status).to.be.equal(404);
     });
   });
 
