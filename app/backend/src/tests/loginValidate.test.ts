@@ -52,4 +52,23 @@ describe('A rota GET /login/validate', () => {
       expect(response.status).to.be.equal(401);
     });
   });
+
+  describe('Quando ocorre um erro interno', () => {
+    before(() => {
+      sinon.stub(User, 'findOne').rejects();
+    })
+
+    after(() => {
+      (User.findOne as sinon.SinonStub).restore();
+    })
+
+    it('Retorna "Something went wrong" com status 500', async () => {
+      const response = await chai.request(app)
+        .get('/login/validate')
+        .set('authorization', mockToken);
+
+      expect(response.body).to.be.deep.equal({ message: 'Something went wrong' });
+      expect(response.status).to.be.equal(500);
+    });
+  });
 });

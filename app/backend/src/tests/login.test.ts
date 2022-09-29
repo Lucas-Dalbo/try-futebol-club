@@ -19,7 +19,7 @@ describe('A rota POST /login', () => {
     });
   
     after(() => {
-      (User.findOne as sinon.SinonStub ).restore();
+      (User.findOne as sinon.SinonStub).restore();
     })
 
     it('Retorna um Token JWT com status 200', async () => {
@@ -91,6 +91,25 @@ describe('A rota POST /login', () => {
   
       expect(response.body).to.be.deep.equal({ message: 'All fields must be filled' });
       expect(response.status).to.be.equal(400);
+    });
+  });
+
+  describe('Quando ocorre um erro interno', () => {
+    before(() => {
+      sinon.stub(User, 'findOne').rejects();
+    })
+
+    after(() => {
+      (User.findOne as sinon.SinonStub).restore();
+    })
+
+    it('Retorna "Something went wrong" com status 500', async () => {
+      const response = await chai.request(app)
+        .post('/login')
+        .send(sendValidUser);
+
+      expect(response.body).to.be.deep.equal({ message: 'Something went wrong' });
+      expect(response.status).to.be.equal(500);
     });
   });
 });
