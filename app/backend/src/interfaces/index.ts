@@ -1,13 +1,12 @@
-interface IUser {
-  id: number;
-  username: string;
-  role: string;
+interface LoginUser {
   email: string;
   password: string;
 }
 
-interface step {
-  step: 'step'
+interface IUser extends LoginUser {
+  id: number;
+  username: string;
+  role: string;
 }
 
-export { IUser, step };
+export { IUser, LoginUser };
