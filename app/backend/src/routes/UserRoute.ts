@@ -1,4 +1,5 @@
 import * as express from 'express';
+import { ReqData, validateJWT } from '../auth';
 import UserController from '../controllers/UserController';
 import UserMiddleware from '../middlewares/UserMiddleware';
 
@@ -16,6 +17,12 @@ class UserRoute {
       '/',
       (req, res, next) => this._middlewrae.loginValidation(req, res, next),
       (req, res, next) => this._controller.login(req, res, next),
+    );
+
+    this.route.get(
+      '/validate',
+      (req: ReqData, res, next) => validateJWT(req, res, next),
+      (req, res, next) => this._controller.role(req, res, next),
     );
   }
 }

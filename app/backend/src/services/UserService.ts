@@ -10,17 +10,23 @@ class UserService {
   //   this._model = model || UserModel;
   // }
 
-  private async emailValidation(email: string): Promise<IUser> {
+  private findByEmail = async (email: string): Promise<IUser | null> => {
     const user = await this._model.findOne({
       where: { email },
     });
 
+    return user;
+  };
+
+  private emailValidation = async (email: string): Promise<IUser> => {
+    const user = await this.findByEmail(email);
+
     if (!user) throw new CustomError('Incorrect email or password', 401);
 
-    return user as IUser;
-  }
+    return user;
+  };
 
-  public async login(data: LoginUser): Promise<void> {
+  public login = async (data: LoginUser): Promise<void> => {
     const { email, password } = data;
 
     const user = await this.emailValidation(email);
@@ -28,7 +34,14 @@ class UserService {
     const passVerify = bcrypt.compareSync(password, user.password);
 
     if (!passVerify) throw new CustomError('Incorrect email or password', 401);
-  }
+  };
+
+  public role = async (email: string): Promise<{ role: string }> => {
+    const user = await this.findByEmail(email);
+    const role = user?.role as string;
+
+    return { role };
+  };
 }
 
 export default UserService;

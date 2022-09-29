@@ -7,7 +7,6 @@ class UserMiddleware {
 
   private fieldsValidation = (data: LoginUser): boolean => {
     if (!data.email || !data.password) return false;
-    if (!data.email.length || !data.password.length) return false;
     return true;
   };
 
