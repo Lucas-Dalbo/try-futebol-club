@@ -38,7 +38,7 @@ class UserService {
 
   public role = async (email: string): Promise<{ role: string }> => {
     const user = await this.findByEmail(email);
-    const role = user?.role as string;
+    const { role } = user as IUser;
 
     return { role };
   };

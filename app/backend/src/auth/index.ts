@@ -26,7 +26,10 @@ const createJWT = (user: TokenData): string => {
 const validateJWT = (req: ReqData, res: Response, next: NextFunction): TokenData | void => {
   try {
     const token: string | undefined = req.headers.authorization;
-    if (!token) res.status(401).json({ message: 'Token not found' });
+    if (!token) {
+      res.status(401).json({ message: 'Token not found' });
+      return;
+    }
 
     const decoded = jwt.verify(token as string, SECRET) as Token;
 
@@ -34,7 +37,6 @@ const validateJWT = (req: ReqData, res: Response, next: NextFunction): TokenData
 
     next();
   } catch (err) {
-    console.log(err);
     res.status(401).json({ message: 'Invalid token' });
   }
 };
