@@ -16,6 +16,16 @@ class TeamController {
       next(error);
     }
   };
+
+  public findByPk = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const team = await this._service.findByPk(id);
+      res.status(200).json(team);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default TeamController;
