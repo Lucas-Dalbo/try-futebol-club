@@ -1,6 +1,6 @@
-import { Op } from 'sequelize';
+import * as bcrypt from 'bcryptjs';
+import { IUser } from '../interfaces';
 import CustomError from '../errors/CustomError';
-// import { IUser } from '../interfaces';
 import UserModel from '../database/models/UserModel';
 
 class UserService {
@@ -10,12 +10,22 @@ class UserService {
   //   this._model = model || UserModel;
   // }
 
-  public async login(email: string, password: string): Promise<void> {
+  private async emailValidation(email: string): Promise<IUser> {
     const user = await this._model.findOne({
-      where: { [Op.and]: [{ email }, { password }] },
+      where: { email },
     });
 
-    if (!user) throw new CustomError('User not found', 404);
+    if (!user) throw new CustomError('Incorrect email or password', 401);
+
+    return user as IUser;
+  }
+
+  public async login(email: string, password: string): Promise<void> {
+    const user = await this.emailValidation(email);
+
+    const passVerify = bcrypt.compareSync(password, user.password);
+
+    if (!passVerify) throw new CustomError('Incorrect email or password', 401);
   }
 }
 

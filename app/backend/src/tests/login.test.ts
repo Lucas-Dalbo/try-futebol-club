@@ -5,51 +5,71 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import User from '../database/models/UserModel';
+import { mockInvalidUser, mockValidUser, sendValidUser } from './mocks';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('A rota GET /login', () => {
-  const mockUser = { email: "ronaldo@fenomeno.com", password: "EuSouRonaldo09" };
+describe('A rota POST /login', () => {
+  describe('Quando recebe um usuário válido', () => {
+    before(async () => {
+      sinon.stub(User, "findOne")
+        .resolves(mockValidUser as User);
+    });
+  
+    after(() => {
+      (User.findOne as sinon.SinonStub ).restore();
+    })
 
-  before(async () => {
-    sinon.stub(User, "findOne")
-      .resolves(mockUser as User);
-  });
+    it('Retorna um Token JWT com status 200', async () => {
+      const response = await chai.request(app)
+        .post('/login')
+        .send(sendValidUser);
 
-  after(() => {
-    (User.findOne as sinon.SinonStub ).restore();
+      expect(response.body).to.have.property('token');
+      expect(response.status).to.be.equal(200);
+    });
   })
 
-  it('Retorna um Token JWT, quando o usuario é valido', async () => {
-    const response = await chai.request(app)
-      .get('/login')
-      .send(mockUser);
+  describe('Quando o email é invalido', () => {  
+    before(async () => {
+      sinon.stub(User, "findOne")
+        .resolves(null as unknown as User);
+    });
+  
+    after(() => {
+      (User.findOne as sinon.SinonStub ).restore();
+    })
+  
+    it('Retorna uma mensagem de erro com status 401', async () => {
+      const response = await chai.request(app)
+        .post('/login')
+        .send(mockInvalidUser);
+  
+      expect(response.body).to.be.deep.equal({ message: 'Incorrect email or password' });
+      expect(response.status).to.be.equal(401);
+    });
+  });
 
-    expect(response.body).to.have.property('token');
-    expect(response.status).to.be.equal(200);
+  describe('Quando o password é invalido', () => {  
+    before(async () => {
+      sinon.stub(User, "findOne")
+        .resolves(mockInvalidUser as User);
+    });
+  
+    after(() => {
+      (User.findOne as sinon.SinonStub ).restore();
+    })
+  
+    it('Retorna uma mensagem de erro com status 401', async () => {
+      const response = await chai.request(app)
+        .post('/login')
+        .send(mockInvalidUser);
+  
+      expect(response.body).to.be.deep.equal({ message: 'Incorrect email or password' });
+      expect(response.status).to.be.equal(401);
+    });
   });
 });
 
-describe('A rota GET /login', () => {
-  const mockUser2 = { email: "messi@messi.com", password: "messiOficial" };
-
-  before(async () => {
-    sinon.stub(User, "findOne")
-      .resolves(null as unknown as User);
-  });
-
-  after(() => {
-    (User.findOne as sinon.SinonStub ).restore();
-  })
-
-  it('Retorna uma mensagem de erro, quando o usuario é invalido', async () => {
-    const response = await chai.request(app)
-      .get('/login')
-      .send(mockUser2);
-
-    expect(response.body).to.be.deep.equal({ message: 'User not found' });
-    expect(response.status).to.be.equal(404);
-  });
-});
