@@ -29,7 +29,7 @@ describe('A rota GET /matches', () => {
     })
   });
 
-  describe('Ao ser chamada com ?inProgress=true', () => {
+  describe('Ao ser chamada com a query ?inProgress=true', () => {
     before(() => {
       sinon.stub(Match, 'findAll').resolves([mockMatches[1]] as unknown as Match[]);
     })
@@ -38,7 +38,7 @@ describe('A rota GET /matches', () => {
       (Match.findAll as sinon.SinonStub).restore();
     });
   
-    it('Retorna uma lista de matches "inProgress = true" com status 200', async () => {
+    it('Retorna uma lista de matches "inProgress: true" com status 200', async () => {
       const result = await chai.request(app).get('/matches?inProgress=true');
   
       const everyProgressIsTrue = result.body.every((match: { inProgress: boolean; }) => match.inProgress === true);
@@ -49,7 +49,7 @@ describe('A rota GET /matches', () => {
     });
   });
 
-  describe('Ao ser chamada com ?inProgress=true', () => {
+  describe('Ao ser chamada com a query ?inProgress=false', () => {
     before(() => {
       sinon.stub(Match, 'findAll').resolves([mockMatches[0]] as unknown as Match[]);
     })
@@ -58,7 +58,7 @@ describe('A rota GET /matches', () => {
       (Match.findAll as sinon.SinonStub).restore();
     });
   
-    it('Retorna uma lista de matches "inProgress = true" com status 200', async () => {
+    it('Retorna uma lista de matches "inProgress: false" com status 200', async () => {
       const result = await chai.request(app).get('/matches?inProgress=false');
   
       const everyProgressIsFalse = result.body.every((match: { inProgress: boolean; }) => match.inProgress === false);
