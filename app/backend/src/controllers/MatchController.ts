@@ -49,6 +49,18 @@ class MatchController {
       next(error);
     }
   };
+
+  public update = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const { homeTeamGoals, awayTeamGoals } = req.body;
+      await this._service.update(id, homeTeamGoals, awayTeamGoals);
+
+      res.status(200).json({ message: 'Updated' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default MatchController;

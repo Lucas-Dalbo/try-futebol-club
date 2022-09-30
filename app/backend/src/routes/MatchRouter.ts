@@ -13,16 +13,18 @@ class MatchRoute {
     this._controller = controller;
     this._middleware = middleware;
 
-    this.route.get(
-      '/',
-      (req, res, next) => this._controller.findAll(req, res, next),
-    );
+    this.route.get('/', (req, res, next) => this._controller.findAll(req, res, next));
 
     this.route.post(
       '/',
       (req: ReqData, res, next) => validateJWT(req, res, next),
       (req, res, next) => this._middleware.matchValidation(req, res, next),
       (req, res, next) => this._controller.create(req, res, next),
+    );
+
+    this.route.patch(
+      '/:id',
+      (req, res, next) => this._controller.update(req, res, next),
     );
 
     this.route.patch(
