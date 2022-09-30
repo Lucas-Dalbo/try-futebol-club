@@ -5,7 +5,7 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import Match from '../database/models/MatchModel';
-import { mockInvalidMatch, mockInvalidMatchTeams, mockMatches, mockNewMatch, mockNewMatchGoals, mockOneTeam, mockValidMatch, mockValidMatchNoGoals } from './mocks';
+import { mockInvalidMatch, mockInvalidMatchTeams, mockMatches, mockNewMatch, mockNewMatchGoals, mockOneTeam, mockToken, mockValidMatch, mockValidMatchNoGoals } from './mocks';
 import Team from '../database/models/TeamModel';
 
 chai.use(chaiHttp);
@@ -99,7 +99,10 @@ describe('A rota POST /matches', () => {
     });
 
     it('Retorna mensagem de erro com status 404', async () => {
-      const response = await chai.request(app).post('/matches').send(mockInvalidMatchTeams);
+      const response = await chai.request(app)
+        .post('/matches')
+        .set('authorization', mockToken)
+        .send(mockInvalidMatchTeams);
 
       expect(response.body).to.be.deep.equal({ message: 'There is no team with such id!' });
       expect(response.status).to.be.equal(404);
@@ -118,7 +121,10 @@ describe('A rota POST /matches', () => {
     });
 
     it('Retorna os dados da partida adicionada com status 201', async () => {
-      const response = await chai.request(app).post('/matches').send(mockValidMatch);
+      const response = await chai.request(app)
+      .post('/matches')
+      .set('authorization', mockToken)
+      .send(mockValidMatch);
 
       expect(response.body).to.be.deep.equal(mockNewMatch);
       expect(response.status).to.be.equal(201);
@@ -137,7 +143,10 @@ describe('A rota POST /matches', () => {
     });
 
     it('Coloca os gols como 0 e retorna os dados da partida adicionada com status 201', async () => {
-      const response = await chai.request(app).post('/matches').send(mockValidMatchNoGoals);
+      const response = await chai.request(app)
+        .post('/matches')
+        .set('authorization', mockToken)
+        .send(mockValidMatchNoGoals);
 
       expect(response.body).to.be.deep.equal(mockNewMatchGoals);
       expect(response.status).to.be.equal(201);
@@ -146,10 +155,36 @@ describe('A rota POST /matches', () => {
 
   describe('Ao ser chamada com HomeTeam = AwayTeam', () => {
     it('Retorna mensagem de erro com status 401', async () => {
-      const response = await chai.request(app).post('/matches').send(mockInvalidMatch);
+      const response = await chai.request(app)
+        .post('/matches')
+        .set('authorization', mockToken)
+        .send(mockInvalidMatch);
+
       const message = 'It is not possible to create a match with two equal teams';
 
       expect(response.body).to.be.deep.equal({ message });
+      expect(response.status).to.be.equal(401);
+    })
+  });
+
+  describe('Ao ser chamada com um token invalido', () => {
+    before(() => {
+      sinon.stub(Team, 'findByPk').resolves(mockOneTeam as Team);
+      sinon.stub(Match, 'create').resolves(mockNewMatch as Match);
+    })
+
+    after(() => {
+      (Team.findByPk as sinon.SinonStub).restore();
+      (Match.create as sinon.SinonStub).restore();
+    });
+
+    it('Retorna "Token must be a valid token" com status 401', async () => {
+      const response = await chai.request(app)
+      .post('/matches')
+      .set('authorization', 'mockToken')
+      .send(mockValidMatch);
+
+      expect(response.body).to.be.deep.equal({ message: 'Token must be a valid token'});
       expect(response.status).to.be.equal(401);
     })
   });
@@ -164,7 +199,11 @@ describe('A rota POST /matches', () => {
     });
 
     it('Retorna "Something went wrong" com status 500', async () => {
-      const response = await chai.request(app).post('/matches').send(mockValidMatchNoGoals);
+      const response = await chai
+        .request(app)
+        .post('/matches')
+        .set('authorization', mockToken)
+        .send(mockValidMatchNoGoals);
 
       expect(response.body).to.be.deep.equal({ message: 'Something went wrong' });
       expect(response.status).to.be.equal(500);

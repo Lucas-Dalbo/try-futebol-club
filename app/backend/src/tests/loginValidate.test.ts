@@ -38,13 +38,13 @@ describe('A rota GET /login/validate', () => {
         .get('/login/validate')
         .set('authorization', 'mockToken');
 
-      expect(response.body).to.be.deep.equal({ message: 'Invalid token'});
+      expect(response.body).to.be.deep.equal({ message: 'Token must be a valid token'});
       expect(response.status).to.be.equal(401);
     });
   });
 
   describe('Quando não recebe um token', () => {
-    it('Retorna "Token not found" com status 401', async () => {
+    it('Retorna "Token must be a valid token" com status 401', async () => {
       const response = await chai.request(app)
         .get('/login/validate');
 
