@@ -6,6 +6,13 @@ import CustomError from '../errors/CustomError';
 class MatchService {
   private _model = Match;
 
+  private validateTeams = async (home: number, away: number): Promise<void> => {
+    const homeT = await Team.findByPk(home);
+    const awayT = await Team.findByPk(away);
+
+    if (!homeT || !awayT) throw new CustomError('There is no team with such id!', 404);
+  };
+
   public findAll = async (): Promise<IMatch[]> => {
     const result = await this._model.findAll(
       {
@@ -34,6 +41,8 @@ class MatchService {
   };
 
   public create = async (data: IMatch): Promise<IMatch> => {
+    await this.validateTeams(data.homeTeam, data.awayTeam);
+
     const matchData = {
       ...data,
       inProgress: !data.inProgress,

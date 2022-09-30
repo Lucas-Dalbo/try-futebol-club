@@ -5,7 +5,8 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import Match from '../database/models/MatchModel';
-import { mockInvalidMatch, mockMatches, mockNewMatch, mockNewMatchGoals, mockValidMatch, mockValidMatchNoGoals } from './mocks';
+import { mockInvalidMatch, mockInvalidMatchTeams, mockMatches, mockNewMatch, mockNewMatchGoals, mockOneTeam, mockValidMatch, mockValidMatchNoGoals } from './mocks';
+import Team from '../database/models/TeamModel';
 
 chai.use(chaiHttp);
 
@@ -88,12 +89,31 @@ describe('A rota GET /matches', () => {
 });
 
 describe('A rota POST /matches', () => {
+  describe('Ao ser chamada com HomeTeam ou AwayTeam invalido', () => {
+    before(() => {
+      sinon.stub(Team, 'findByPk').resolves(null as unknown as Match);
+    })
+
+    after(() => {
+      (Team.findByPk as sinon.SinonStub).restore();
+    });
+
+    it('Retorna mensagem de erro com status 404', async () => {
+      const response = await chai.request(app).post('/matches').send(mockInvalidMatchTeams);
+
+      expect(response.body).to.be.deep.equal({ message: 'There is no team with such id!' });
+      expect(response.status).to.be.equal(404);
+    })
+  });
+
   describe('Ao ser chamada com dados validos', () => {
     before(() => {
+      sinon.stub(Team, 'findByPk').resolves(mockOneTeam as Team);
       sinon.stub(Match, 'create').resolves(mockNewMatch as Match);
     })
 
     after(() => {
+      (Team.findByPk as sinon.SinonStub).restore();
       (Match.create as sinon.SinonStub).restore();
     });
 
@@ -107,10 +127,12 @@ describe('A rota POST /matches', () => {
 
   describe('Ao ser chamada sem os valores dos gols', () => {
     before(() => {
+      sinon.stub(Team, 'findByPk').resolves(mockOneTeam as Team);
       sinon.stub(Match, 'create').resolves(mockNewMatchGoals as Match);
     })
 
     after(() => {
+      (Team.findByPk as sinon.SinonStub).restore();
       (Match.create as sinon.SinonStub).restore();
     });
 
