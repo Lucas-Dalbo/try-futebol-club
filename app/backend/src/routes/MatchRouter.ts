@@ -1,13 +1,16 @@
 import * as express from 'express';
+import MatchMiddleware from '../middlewares/MatchMiddleware';
 import MatchController from '../controllers/MatchController';
 
 class MatchRoute {
   public route: express.Router;
   private _controller: MatchController;
+  private _middleware: MatchMiddleware;
 
-  constructor(controller = new MatchController()) {
+  constructor(controller = new MatchController(), middleware = new MatchMiddleware()) {
     this.route = express.Router();
     this._controller = controller;
+    this._middleware = middleware;
 
     this.route.get(
       '/',
@@ -16,6 +19,7 @@ class MatchRoute {
 
     this.route.post(
       '/',
+      (req, res, next) => this._middleware.matchValidation(req, res, next),
       (req, res, next) => this._controller.create(req, res, next),
     );
 

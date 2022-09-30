@@ -5,7 +5,7 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import Match from '../database/models/MatchModel';
-import { mockMatches, mockNewMatch, mockValidMatch } from './mocks';
+import { mockInvalidMatch, mockMatches, mockNewMatch, mockNewMatchGoals, mockValidMatch, mockValidMatchNoGoals } from './mocks';
 
 chai.use(chaiHttp);
 
@@ -103,6 +103,50 @@ describe('A rota POST /matches', () => {
       expect(response.body).to.be.deep.equal(mockNewMatch);
       expect(response.status).to.be.equal(201);
     })
+  });
+
+  describe('Ao ser chamada sem os valores dos gols', () => {
+    before(() => {
+      sinon.stub(Match, 'create').resolves(mockNewMatchGoals as Match);
+    })
+
+    after(() => {
+      (Match.create as sinon.SinonStub).restore();
+    });
+
+    it('Coloca os gols como 0 e retorna os dados da partida adicionada com status 201', async () => {
+      const response = await chai.request(app).post('/matches').send(mockValidMatchNoGoals);
+
+      expect(response.body).to.be.deep.equal(mockNewMatchGoals);
+      expect(response.status).to.be.equal(201);
+    })
+  });
+
+  describe('Ao ser chamada com HomeTeam = AwayTeam', () => {
+    it('Retorna mensagem de erro com status 401', async () => {
+      const response = await chai.request(app).post('/matches').send(mockInvalidMatch);
+      const message = 'It is not possible to create a match with two equal teams';
+
+      expect(response.body).to.be.deep.equal({ message });
+      expect(response.status).to.be.equal(401);
+    })
+  });
+
+  describe('Quando ocorre um erro interno', () => {
+    before(() => {
+      sinon.stub(Match, 'create').rejects();
+    })
+
+    after(() => {
+      (Match.create as sinon.SinonStub).restore();
+    });
+
+    it('Retorna "Something went wrong" com status 500', async () => {
+      const response = await chai.request(app).post('/matches').send(mockValidMatchNoGoals);
+
+      expect(response.body).to.be.deep.equal({ message: 'Something went wrong' });
+      expect(response.status).to.be.equal(500);
+    });
   });
 });
 

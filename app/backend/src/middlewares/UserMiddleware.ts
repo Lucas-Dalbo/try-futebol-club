@@ -10,7 +10,7 @@ class UserMiddleware {
     return true;
   };
 
-  public loginValidation = (req: Request, _res: Response, next: NextFunction) => {
+  public loginValidation = (req: Request, _res: Response, next: NextFunction): void => {
     const { email, password } = req.body;
     const validate = this.fieldsValidation({ email, password });
 
