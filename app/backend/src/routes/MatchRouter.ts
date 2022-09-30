@@ -18,6 +18,11 @@ class MatchRoute {
       '/',
       (req, res, next) => this._controller.create(req, res, next),
     );
+
+    this.route.patch(
+      '/:id/finish',
+      (req, res, next) => this._controller.finish(req, res, next),
+    );
   }
 }
 
