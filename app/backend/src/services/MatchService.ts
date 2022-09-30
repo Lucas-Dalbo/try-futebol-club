@@ -1,6 +1,7 @@
 import Team from '../database/models/TeamModel';
 import { IMatch, IMatchTeams } from '../interfaces';
 import Match from '../database/models/MatchModel';
+// import CustomError from '../errors/CustomError';
 
 class MatchService {
   private _model = Match;
@@ -31,6 +32,27 @@ class MatchService {
 
     return result as IMatchTeams[];
   };
+
+  public create = async (data: IMatch): Promise<IMatch> => {
+    const matchData = {
+      ...data,
+      inProgress: !data.inProgress,
+      homeTeamGoals: !data.homeTeamGoals ? 0 : data.homeTeamGoals,
+      awayTeamGoals: !data.awayTeamGoals ? 0 : data.awayTeamGoals,
+    };
+
+    const result = await this._model.create(matchData);
+
+    return result;
+  };
+
+  // public finish = async (id: string): Promise<void> => {
+  //   const match = await this._model.findByPk(id);
+  //   if (!match) throw new CustomError('Match not found', 404);
+
+  //   const result = await this._model.update({ inProgress: false }, { where: { id } });
+  //   console.log(result);
+  // };
 }
 
 export default MatchService;

@@ -5,7 +5,7 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import Match from '../database/models/MatchModel';
-import { mockMatches } from './mocks';
+import { mockMatches, mockNewMatch, mockValidMatch } from './mocks';
 
 chai.use(chaiHttp);
 
@@ -84,5 +84,24 @@ describe('A rota GET /matches', () => {
       expect(response.body).to.be.deep.equal({ message: 'Something went wrong' });
       expect(response.status).to.be.equal(500);
     });
+  });
+});
+
+describe.only('A rota POST /matches', () => {
+  describe('Ao ser chamada com dados validos', () => {
+    before(() => {
+      sinon.stub(Match, 'create').resolves(mockNewMatch as Match);
+    })
+
+    after(() => {
+      (Match.create as sinon.SinonStub).restore();
+    });
+
+    it('Retorna os dados da partida adicionada com status 201', async () => {
+      const response = await chai.request(app).post('/matches').send(mockValidMatch);
+
+      expect(response.body).to.be.deep.equal(mockNewMatch);
+      expect(response.status).to.be.equal(201);
+    })
   });
 });

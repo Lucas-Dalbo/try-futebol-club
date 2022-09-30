@@ -82,3 +82,12 @@ export const mockMatches = [
     }
   }
 ];
+
+export const mockValidMatch = {
+  homeTeam: 16,
+  awayTeam: 8,
+  homeTeamGoals: 2,
+  awayTeamGoals: 0,
+}
+
+export const mockNewMatch = { ...mockValidMatch, id: 1, inProgress: true, };

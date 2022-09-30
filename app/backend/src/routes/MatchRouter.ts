@@ -13,6 +13,11 @@ class MatchRoute {
       '/',
       (req, res, next) => this._controller.findAll(req, res, next),
     );
+
+    this.route.post(
+      '/',
+      (req, res, next) => this._controller.create(req, res, next),
+    );
   }
 }
 
