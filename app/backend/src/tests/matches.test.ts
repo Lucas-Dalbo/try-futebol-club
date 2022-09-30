@@ -5,7 +5,7 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import Match from '../database/models/MatchModel';
-import { mockInvalidMatch, mockInvalidMatchTeams, mockMatches, mockNewMatch, mockNewMatchGoals, mockOneTeam, mockToken, mockValidMatch, mockValidMatchNoGoals } from './mocks';
+import { mockInvalidMatch, mockInvalidMatchTeams, mockMatches, mockNewMatch, mockNewMatchGoals, mockOneTeam, mockToken, mockUpdateMatch, mockValidMatch, mockValidMatchNoGoals } from './mocks';
 import Team from '../database/models/TeamModel';
 
 chai.use(chaiHttp);
@@ -242,6 +242,46 @@ describe('A rota PATCH /matches/:id/finish', () => {
 
     it('Retorna "Match not found" com status 404', async () => {
       const response = await chai.request(app).patch('/matches/999/finish');
+
+      expect(response.body).to.be.deep.equal({ message: 'Match not found' });
+      expect(response.status).to.be.equal(404);
+    })
+  });
+});
+
+describe('A rota PATCH /matches/:id', () => {
+  describe('Ao ser chamada com um id e dados válidos', () => {
+    before(() => {
+      sinon.stub(Match, 'findByPk').resolves(mockNewMatch as Match);
+      sinon.stub(Match, 'update').resolves();
+    })
+
+    after(() => {
+      (Match.findByPk as sinon.SinonStub).restore();
+      (Match.update as sinon.SinonStub).restore();
+    });
+
+    it('Retorna "Updated" com status 200', async () => {
+      const response = await chai.request(app).patch('/matches/1')
+        .send(mockUpdateMatch);
+
+      expect(response.body).to.be.deep.equal({ message: 'Updated' });
+      expect(response.status).to.be.equal(200);
+    })
+  });
+
+  describe('Ao ser chamada com um id inválido', () => {
+    before(() => {
+      sinon.stub(Match, 'findByPk').resolves(null as unknown as Match);
+    })
+
+    after(() => {
+      (Match.findByPk as sinon.SinonStub).restore();
+    });
+
+    it('Retorna "Match not found" com status 404', async () => {
+      const response = await chai.request(app).patch('/matches/999')
+        .send(mockUpdateMatch);
 
       expect(response.body).to.be.deep.equal({ message: 'Match not found' });
       expect(response.status).to.be.equal(404);

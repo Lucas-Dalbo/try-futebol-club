@@ -112,3 +112,8 @@ export const mockInvalidMatchTeams = {
   homeTeamGoals: 2,
   awayTeamGoals: 0,
 };
+
+export const mockUpdateMatch = {
+  homeTeamGoals: 1,
+  awayTemmGoals: 7,
+}
