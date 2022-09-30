@@ -17,6 +17,20 @@ class MatchService {
 
     return result as IMatchTeams[];
   };
+
+  public findAllByProgress = async (inProgress: boolean): Promise<IMatch[]> => {
+    const result = await this._model.findAll(
+      {
+        where: { inProgress },
+        include: [
+          { model: Team, as: 'teamHome', attributes: { exclude: ['id'] } },
+          { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
+        ],
+      },
+    );
+
+    return result as IMatchTeams[];
+  };
 }
 
 export default MatchService;
