@@ -87,7 +87,7 @@ describe('A rota GET /matches', () => {
   });
 });
 
-describe.only('A rota POST /matches', () => {
+describe('A rota POST /matches', () => {
   describe('Ao ser chamada com dados validos', () => {
     before(() => {
       sinon.stub(Match, 'create').resolves(mockNewMatch as Match);
@@ -102,6 +102,44 @@ describe.only('A rota POST /matches', () => {
 
       expect(response.body).to.be.deep.equal(mockNewMatch);
       expect(response.status).to.be.equal(201);
+    })
+  });
+});
+
+describe('A rota PATCH /matches/:id/finish', () => {
+  describe('Ao ser chamada com um id válido', () => {
+    before(() => {
+      sinon.stub(Match, 'findByPk').resolves(mockNewMatch as Match);
+      sinon.stub(Match, 'update').resolves();
+    })
+
+    after(() => {
+      (Match.findByPk as sinon.SinonStub).restore();
+      (Match.update as sinon.SinonStub).restore();
+    });
+
+    it('Retorna "Finished" com status 200', async () => {
+      const response = await chai.request(app).patch('/matches/1/finish');
+
+      expect(response.body).to.be.deep.equal({ message: 'Finished' });
+      expect(response.status).to.be.equal(200);
+    })
+  });
+
+  describe('Ao ser chamada com um id inválido', () => {
+    before(() => {
+      sinon.stub(Match, 'findByPk').resolves(null as unknown as Match);
+    })
+
+    after(() => {
+      (Match.findByPk as sinon.SinonStub).restore();
+    });
+
+    it('Retorna "Match not found" com status 404', async () => {
+      const response = await chai.request(app).patch('/matches/999/finish');
+
+      expect(response.body).to.be.deep.equal({ message: 'Match not found' });
+      expect(response.status).to.be.equal(404);
     })
   });
 });

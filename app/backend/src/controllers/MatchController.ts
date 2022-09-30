@@ -42,7 +42,7 @@ class MatchController {
   public finish = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
-      this._service.finish(id);
+      await this._service.finish(id);
 
       res.status(200).json({ message: 'Finished' });
     } catch (error) {

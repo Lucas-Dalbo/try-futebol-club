@@ -48,6 +48,7 @@ class MatchService {
 
   public finish = async (id: string): Promise<void> => {
     const match = await this._model.findByPk(id);
+
     if (!match) throw new CustomError('Match not found', 404);
 
     await this._model.update({ inProgress: false }, { where: { id } });
