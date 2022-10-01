@@ -4,15 +4,11 @@ import MatchController from '../controllers/MatchController';
 import { ReqData, validateJWT } from '../auth';
 
 class MatchRoute {
-  public route: express.Router;
-  private _controller: MatchController;
-  private _middleware: MatchMiddleware;
-
-  constructor(controller = new MatchController(), middleware = new MatchMiddleware()) {
-    this.route = express.Router();
-    this._controller = controller;
-    this._middleware = middleware;
-
+  constructor(
+    private _controller: MatchController = new MatchController(),
+    private _middleware: MatchMiddleware = new MatchMiddleware(),
+    public route: express.Router = express.Router(),
+  ) {
     this.route.get('/', (req, res, next) => this._controller.findAll(req, res, next));
 
     this.route.post(
@@ -22,15 +18,11 @@ class MatchRoute {
       (req, res, next) => this._controller.create(req, res, next),
     );
 
-    this.route.patch(
-      '/:id',
-      (req, res, next) => this._controller.update(req, res, next),
-    );
+    this.route
+      .patch('/:id', (req, res, next) => this._controller.update(req, res, next));
 
-    this.route.patch(
-      '/:id/finish',
-      (req, res, next) => this._controller.finish(req, res, next),
-    );
+    this.route
+      .patch('/:id/finish', (req, res, next) => this._controller.finish(req, res, next));
   }
 }
 

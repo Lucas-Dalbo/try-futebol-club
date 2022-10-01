@@ -4,7 +4,7 @@ import TeamService from '../services/TeamService';
 class TeamController {
   private _service: TeamService;
 
-  constructor(service = new TeamService()) {
+  constructor(service: TeamService = new TeamService()) {
     this._service = service;
   }
 

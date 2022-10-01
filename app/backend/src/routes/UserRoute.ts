@@ -4,18 +4,14 @@ import UserController from '../controllers/UserController';
 import UserMiddleware from '../middlewares/UserMiddleware';
 
 class UserRoute {
-  public route: express.Router;
-  private _controller: UserController;
-  private _middlewrae: UserMiddleware;
-
-  constructor(controller = new UserController(), middleware = new UserMiddleware()) {
-    this.route = express.Router();
-    this._controller = controller;
-    this._middlewrae = middleware;
-
+  constructor(
+    private _controller: UserController = new UserController(),
+    private _middleware: UserMiddleware = new UserMiddleware(),
+    public route: express.Router = express.Router(),
+  ) {
     this.route.post(
       '/',
-      (req, res, next) => this._middlewrae.loginValidation(req, res, next),
+      (req, res, next) => this._middleware.loginValidation(req, res, next),
       (req, res, next) => this._controller.login(req, res, next),
     );
 

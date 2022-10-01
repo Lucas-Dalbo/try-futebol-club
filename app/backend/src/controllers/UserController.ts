@@ -5,7 +5,7 @@ import UserService from '../services/UserService';
 class UserController {
   private _service: UserService;
 
-  constructor(service = new UserService()) {
+  constructor(service: UserService = new UserService()) {
     this._service = service;
   }
 

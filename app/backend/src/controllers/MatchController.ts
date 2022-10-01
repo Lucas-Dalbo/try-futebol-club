@@ -4,7 +4,7 @@ import MatchService from '../services/MatchService';
 class MatchController {
   private _service: MatchService;
 
-  constructor(service = new MatchService()) {
+  constructor(service: MatchService = new MatchService()) {
     this._service = service;
   }
 
