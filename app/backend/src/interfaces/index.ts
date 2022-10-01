@@ -23,9 +23,28 @@ interface IMatch {
   inProgress?: boolean,
 }
 
+interface IMatchFull extends IMatch {
+  id: number,
+  homeTeamGoals: number,
+  awayTeamGoals: number,
+}
+
 interface IMatchTeams extends IMatch {
   teamHome?: { teamName: string } | [{ teamName: string }],
   teamAway?: { teamName: string } | [{ teamName: string }],
 }
 
-export { IUser, LoginUser, ITeam, IMatch, IMatchTeams };
+interface IBoard {
+  name: string,
+  totalPoints: number,
+  totalGames: number,
+  totalVictories: number,
+  totalDraws: number,
+  totalLosses: number,
+  goalsFavor: number,
+  goalsOwn: number,
+  goalsBalance: number,
+  efficiency: number,
+}
+
+export { IUser, LoginUser, ITeam, IMatch, IMatchTeams, IBoard, IMatchFull };
