@@ -9,6 +9,10 @@ class MatchRoute {
     private _middleware: MatchMiddleware = new MatchMiddleware(),
     public route: express.Router = express.Router(),
   ) {
+    this.setRequest();
+  }
+
+  private setRequest = (): void => {
     this.route.get('/', (req, res, next) => this._controller.findAll(req, res, next));
 
     this.route.post(
@@ -23,7 +27,7 @@ class MatchRoute {
 
     this.route
       .patch('/:id/finish', (req, res, next) => this._controller.finish(req, res, next));
-  }
+  };
 }
 
 const route = new MatchRoute();
