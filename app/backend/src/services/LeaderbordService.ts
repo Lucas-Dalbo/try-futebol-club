@@ -21,7 +21,7 @@ class LeaderbordService {
     goalsFavor: 0,
     goalsOwn: 0,
     goalsBalance: 0,
-    efficiency: 0,
+    efficiency: '0',
   });
 
   private findMatches = {
@@ -96,7 +96,7 @@ class LeaderbordService {
     const secondBoard = firstBoard.map((team) => {
       const totalPoints = (team.totalVictories * 3) + team.totalDraws;
       const goalsBalance = team.goalsFavor - team.goalsOwn;
-      const efficiency = totalPoints / (team.totalGames * 3 * 100);
+      const efficiency = ((totalPoints / (team.totalGames * 3)) * 100).toFixed(2);
 
       return {
         ...team,

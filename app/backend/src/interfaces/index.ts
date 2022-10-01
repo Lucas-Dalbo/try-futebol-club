@@ -44,7 +44,7 @@ interface IBoard {
   goalsFavor: number,
   goalsOwn: number,
   goalsBalance: number,
-  efficiency: number,
+  efficiency: string,
 }
 
 export { IUser, LoginUser, ITeam, IMatch, IMatchTeams, IBoard, IMatchFull };
