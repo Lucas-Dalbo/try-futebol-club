@@ -1,16 +1,37 @@
-# 🚧 README em construção 🚧
+[Read it in English!](./README-Eng.md)
 
-<!-- Olá, Tryber!
+# Projeto: Try Futebol Clube
+Este projeto foi desenvolvido enquanto estudante da Trybe no módulo de Back-End.
+Originalmente, seu nome é Trybe Futebol Clube.
 
-Esse é apenas um arquivo inicial para o README do seu projeto.
+---
+## Objetivo
+O objetivo do projeto é criar um API utilizando Node.js, Express, Sequelize e TypeScript, que acessa um banco MySQL com informações de times de futebol e as partidas entre eles.
+Essa API trata as informações do banco de dados para serem exibidas corretamente no Front-End.
 
-É essencial que você preencha esse documento por conta própria, ok?
+---
+## Aprendizados
+ - Como utilizar Sequelize com TypeScript na construção de uma API.
+ - Como aplicar os princípios SOLID e POO.
+ - Aplicação e desenvolvimento de conhecimentos envolvendo lógica de programação.
 
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
+---
+## Funcionalidades
+ - Criação e Exibição de partidas entre dois times distintos.
+ - Edição ou finalização de uma partida existente.
+ - Sistema de login para pessoas registradas no banco de dados.
+ - Mudanças de funcionalidades baseadas no nível de autorização da pessoa usuária.
+ - Exibição de tabela de classificação automatizada, construída com base nas informações das partidas finalizadas.
+ 
+---
+## Observação
+O front-end da aplicação foi desenvolvido pelo time da Trybe.
 
-⚠️ IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
-
--->
+---
+## O que foi utilizado?
+ - TypeScript.
+ - Node.js com Express e Sequelize (Back-end).
+ - MySQL (Bando de Dados).
+ - React (Front-end).
+ - Docker-compose e dockerfile.
+ - ESlint para manter a integridade do código.
