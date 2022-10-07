@@ -23,6 +23,10 @@ The objective was to build the Back-end of the app, an API of football teams and
 - Leaderboard automatically build based on the data of finished matches.
 
 ---
+## Observation
+The front-end part of the app was developed by the Trybe team.
+
+---
 ## What was used?
 - TypeScript.
 - Node.js com Express e Sequelize (Back-end).
