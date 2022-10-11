@@ -35,3 +35,9 @@ O front-end da aplicação foi desenvolvido pelo time da Trybe.
  - React (Front-end).
  - Docker-compose e dockerfile.
  - ESlint para manter a integridade do código.
+ 
+ ---
+ ## Demosntração
+ Neste post esta um video da aplicação em funcionamento:
+ [Publicação no LinkedIn](https://www.linkedin.com/posts/lucasdalbofernandes_backend-vqv-activity-6985580298612674560-tuOz?utm_source=share&utm_medium=member_desktop)
+ 
