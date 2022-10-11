@@ -32,6 +32,7 @@ O front-end da aplicação foi desenvolvido pelo time da Trybe.
  - TypeScript.
  - Node.js com Express e Sequelize (Back-end).
  - MySQL (Bando de Dados).
+ - Mocha, Chai, Chai-http e Sinon para testes de integração.
  - React (Front-end).
  - Docker-compose e dockerfile.
  - ESlint para manter a integridade do código.
