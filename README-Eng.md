@@ -32,5 +32,6 @@ The front-end part of the app was developed by the Trybe team.
 - Node.js com Express e Sequelize (Back-end).
 - MySQL (Database).
 - React (Front-end).
+- Mocha, Chai, Chai-HTTP, Sinon.
 - Docker-compose and Dockerfile.
 - ESlint.
