@@ -1,4 +1,4 @@
-[Leia em Portugês!](./README.md)
+[Leia em Português!](./README.md)
 
 # Try Football Club Project
 This project was developed while a student at Trybe, in the Back-End module.
